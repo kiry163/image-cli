@@ -257,9 +257,11 @@ Options:
   --text           文字水印内容
   --font-size      文字水印字号 (px)
   --font           文字水印字体
+  --font-file      文字水印字体文件
   --color          文字水印颜色
   --stroke-color   文字水印描边颜色
   --stroke-width   文字水印描边宽度 (px)
+  --stroke-mode    描边模式 (circle|8dir)
   --background     文字水印背景色
 
 Examples:
@@ -268,12 +270,13 @@ Examples:
   image-cli watermark *.jpg logo.png --gravity southeast --scale 0.15
   image-cli watermark photo.jpg output/ --text "Sample" --font-size 24
   image-cli watermark photo.jpg output/ --text "Sample" --font-size 24 --font "Arial" --color "#ffffff"
+  image-cli watermark photo.jpg output/ --text "Sample" --font-size 24 --font-file "/path/to/font.ttf"
   image-cli watermark photo.jpg output/ --text "Sample" --font-size 24 --stroke-color black --stroke-width 2
+  image-cli watermark photo.jpg output/ --text "Sample" --font-size 24 --stroke-color black --stroke-width 2 --stroke-mode 8dir
   image-cli watermark photo.jpg output/ --text "Sample" --font-size 24 --background "#000000" --color "#ffffff"
 
 说明:
-  - 文字水印依赖 ImageMagick（使用 `magick` 或 `convert`）
-  - 中文水印需安装中文字体（如 `fonts-noto-cjk` 或 `fonts-wqy-zenhei`）
+  - 文字水印默认使用内置字体，可通过 `--font-file` 指定外部字体
 ```
 
 #### 4.2.6 info - 查看信息
@@ -400,10 +403,12 @@ watermark:
   default_offset_y: 0
   default_font_size: 24
   default_font: ""
+  default_font_file: ""
   default_color: white
   default_stroke_color: ""
   default_stroke_width: 0
   default_background: none
+  default_stroke_mode: circle
 
 # AI 模型配置
 ai:

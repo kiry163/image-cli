@@ -139,12 +139,14 @@ image-cli rotate input.jpg output.jpg --flop
 image-cli watermark input.jpg logo.png output.jpg --opacity 0.6 --scale 0.2
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --gravity southeast
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --font "Arial" --color "#ffffff"
+image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --font-file "/path/to/font.ttf"
 image-cli watermark input.jpg output.jpg --text "Sample" --offset-x 10 --offset-y -10
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --stroke-color black --stroke-width 2
+image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --stroke-color black --stroke-width 2 --stroke-mode 8dir
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --background "#000000" --color "#ffffff"
 ```
 
-说明: 文字水印依赖 ImageMagick（`magick` 或 `convert`）。中文水印需安装中文字体（如 `fonts-noto-cjk` 或 `fonts-wqy-zenhei`）。
+说明: 文字水印默认使用内置字体，亦可通过 `--font-file` 指定字体文件。
 
 ### batch
 
@@ -157,6 +159,7 @@ image-cli batch resize "./images" --width 800 --height 600 --fit cover --output 
 image-cli batch rotate "./images" --degrees 90 --output ./output/
 image-cli batch watermark "./images" --logo logo.png --opacity 0.6 --output ./output/
 image-cli batch watermark "./images" --text "Sample" --font-size 24 --font "Arial" --color "#ffffff" --stroke-color black --stroke-width 2 --output ./output/
+image-cli batch watermark "./images" --text "Sample" --font-size 24 --font-file "/path/to/font.ttf" --output ./output/
 ```
 
 ## 全局参数

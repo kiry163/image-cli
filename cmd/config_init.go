@@ -72,10 +72,12 @@ const defaultConfigYAML = "" +
 	"  default_offset_y: 0\n" +
 	"  default_font_size: 24\n" +
 	"  default_font: \"\"\n" +
+	"  default_font_file: \"\"\n" +
 	"  default_color: white\n" +
 	"  default_stroke_color: \"\"\n" +
 	"  default_stroke_width: 0\n" +
 	"  default_background: none\n" +
+	"  default_stroke_mode: circle\n" +
 	"\n" +
 	"# AI 模型配置\n" +
 	"ai:\n" +

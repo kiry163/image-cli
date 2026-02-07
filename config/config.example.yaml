@@ -23,10 +23,12 @@ watermark:
   default_offset_y: 0
   default_font_size: 24
   default_font: ""
+  default_font_file: ""
   default_color: white
   default_stroke_color: ""
   default_stroke_width: 0
   default_background: none
+  default_stroke_mode: circle
 
 # AI 模型配置
 ai:

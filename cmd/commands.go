@@ -210,10 +210,12 @@ func newWatermarkCmd() *cobra.Command {
 			text, _ := cmd.Flags().GetString("text")
 			fontSize, _ := cmd.Flags().GetInt("font-size")
 			font, _ := cmd.Flags().GetString("font")
+			fontFile, _ := cmd.Flags().GetString("font-file")
 			color, _ := cmd.Flags().GetString("color")
 			strokeColor, _ := cmd.Flags().GetString("stroke-color")
 			strokeWidth, _ := cmd.Flags().GetInt("stroke-width")
 			background, _ := cmd.Flags().GetString("background")
+			strokeMode, _ := cmd.Flags().GetString("stroke-mode")
 			if opacity <= 0 {
 				opacity = cfg.Watermark.DefaultOpacity
 			}
@@ -235,6 +237,9 @@ func newWatermarkCmd() *cobra.Command {
 			if font == "" {
 				font = cfg.Watermark.DefaultFont
 			}
+			if fontFile == "" {
+				fontFile = cfg.Watermark.DefaultFontFile
+			}
 			if color == "" {
 				color = cfg.Watermark.DefaultColor
 			}
@@ -246,6 +251,9 @@ func newWatermarkCmd() *cobra.Command {
 			}
 			if background == "" {
 				background = cfg.Watermark.DefaultBackground
+			}
+			if strokeMode == "" {
+				strokeMode = cfg.Watermark.DefaultStrokeMode
 			}
 			input := args[0]
 			var output string
@@ -266,10 +274,12 @@ func newWatermarkCmd() *cobra.Command {
 				OffsetY:     offsetY,
 				FontSize:    fontSize,
 				Font:        font,
+				FontFile:    fontFile,
 				Color:       color,
 				StrokeColor: strokeColor,
 				StrokeWidth: strokeWidth,
 				Background:  background,
+				StrokeMode:  strokeMode,
 				Conflict:    cfg.Base.Conflict,
 			})
 			if err != nil {
@@ -287,10 +297,12 @@ func newWatermarkCmd() *cobra.Command {
 	cmd.Flags().String("text", "", "文字水印")
 	cmd.Flags().Int("font-size", 0, "文字水印字号(px)")
 	cmd.Flags().String("font", "", "文字水印字体")
+	cmd.Flags().String("font-file", "", "文字水印字体文件")
 	cmd.Flags().String("color", "", "文字水印颜色")
 	cmd.Flags().String("stroke-color", "", "文字水印描边颜色")
 	cmd.Flags().Int("stroke-width", 0, "文字水印描边宽度(px)")
 	cmd.Flags().String("background", "", "文字水印背景色")
+	cmd.Flags().String("stroke-mode", "", "描边模式: circle|8dir")
 	return cmd
 }
 
@@ -384,10 +396,12 @@ func newBatchCmd() *cobra.Command {
 					text, _ := cmd.Flags().GetString("text")
 					fontSize, _ := cmd.Flags().GetInt("font-size")
 					font, _ := cmd.Flags().GetString("font")
+					fontFile, _ := cmd.Flags().GetString("font-file")
 					color, _ := cmd.Flags().GetString("color")
 					strokeColor, _ := cmd.Flags().GetString("stroke-color")
 					strokeWidth, _ := cmd.Flags().GetInt("stroke-width")
 					background, _ := cmd.Flags().GetString("background")
+					strokeMode, _ := cmd.Flags().GetString("stroke-mode")
 					logo, _ := cmd.Flags().GetString("logo")
 					if text == "" && logo == "" {
 						return apperror.InvalidArgument("批量水印需要 --logo 或 --text", nil)
@@ -416,6 +430,9 @@ func newBatchCmd() *cobra.Command {
 					if font == "" {
 						font = cfg.Watermark.DefaultFont
 					}
+					if fontFile == "" {
+						fontFile = cfg.Watermark.DefaultFontFile
+					}
 					if color == "" {
 						color = cfg.Watermark.DefaultColor
 					}
@@ -428,6 +445,9 @@ func newBatchCmd() *cobra.Command {
 					if background == "" {
 						background = cfg.Watermark.DefaultBackground
 					}
+					if strokeMode == "" {
+						strokeMode = cfg.Watermark.DefaultStrokeMode
+					}
 					_, err = core.Watermark(input, outDir, core.WatermarkOptions{
 						LogoPath:    logo,
 						Text:        text,
@@ -438,10 +458,12 @@ func newBatchCmd() *cobra.Command {
 						OffsetY:     offsetY,
 						FontSize:    fontSize,
 						Font:        font,
+						FontFile:    fontFile,
 						Color:       color,
 						StrokeColor: strokeColor,
 						StrokeWidth: strokeWidth,
 						Background:  background,
+						StrokeMode:  strokeMode,
 						Conflict:    cfg.Base.Conflict,
 					})
 				default:
@@ -475,10 +497,12 @@ func newBatchCmd() *cobra.Command {
 	cmd.Flags().String("text", "", "文字水印")
 	cmd.Flags().Int("font-size", 0, "文字水印字号(px)")
 	cmd.Flags().String("font", "", "文字水印字体")
+	cmd.Flags().String("font-file", "", "文字水印字体文件")
 	cmd.Flags().String("color", "", "文字水印颜色")
 	cmd.Flags().String("stroke-color", "", "文字水印描边颜色")
 	cmd.Flags().Int("stroke-width", 0, "文字水印描边宽度(px)")
 	cmd.Flags().String("background", "", "文字水印背景色")
+	cmd.Flags().String("stroke-mode", "", "描边模式: circle|8dir")
 	cmd.Flags().String("width", "", "宽度")
 	cmd.Flags().String("height", "", "高度")
 	cmd.Flags().String("fit", "", "适应模式")

@@ -199,23 +199,27 @@ image-cli watermark input.jpg logo.png output.jpg --opacity 0.6 --scale 0.2
 image-cli watermark input.jpg logo.png output.jpg --gravity center --offset-x 10 --offset-y -10
 ```
 
-### 3.9 watermark（文字水印，依赖 ImageMagick）
+### 3.9 watermark（文字水印）
 
-文字水印支持字体、颜色、描边与背景，适合动态标识。中文水印需安装中文字体。
+文字水印支持字体、颜色、描边与背景，适合动态标识。默认使用内置字体，可通过 `--font-file` 指定外部字体。
 
 关键参数：
 - `--text` 文字内容
 - `--font-size` 字号（px）
 - `--font` 字体名称
+- `--font-file` 字体文件路径
 - `--color` 文字颜色（如 #ffffff）
 - `--stroke-color` 描边颜色
 - `--stroke-width` 描边宽度（px）
+- `--stroke-mode` 描边模式（circle/8dir）
 - `--background` 背景色（如 #000000 或 none）
 
 ```bash
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --gravity southeast
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --font "Arial" --color "#ffffff"
+image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --font-file "/path/to/font.ttf"
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --stroke-color black --stroke-width 2
+image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --stroke-color black --stroke-width 2 --stroke-mode 8dir
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --background "#000000" --color "#ffffff"
 ```
 

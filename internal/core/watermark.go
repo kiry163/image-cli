@@ -1,10 +1,7 @@
 package core
 
 import (
-	"bytes"
-	"fmt"
 	"os"
-	"os/exec"
 	"strings"
 
 	"github.com/h2non/bimg"
@@ -21,10 +18,12 @@ type WatermarkOptions struct {
 	OffsetY     int
 	FontSize    int
 	Font        string
+	FontFile    string
 	Color       string
 	StrokeColor string
 	StrokeWidth int
 	Background  string
+	StrokeMode  string
 	Conflict    string
 }
 
@@ -77,6 +76,10 @@ func Watermark(inputPath, outputArg string, opts WatermarkOptions) (string, erro
 	if err != nil {
 		return "", apperror.InvalidInput("无法读取水印尺寸", err)
 	}
+	watermarkBuf, wmSize, err = scaleWatermarkIfNeeded(watermarkBuf, wmSize, baseSize)
+	if err != nil {
+		return "", err
+	}
 	left, top, err := gravityPosition(baseSize.Width, baseSize.Height, wmSize.Width, wmSize.Height, opts.Gravity, opts.OffsetX, opts.OffsetY)
 	if err != nil {
 		return "", err
@@ -92,6 +95,9 @@ func Watermark(inputPath, outputArg string, opts WatermarkOptions) (string, erro
 	}
 	newImage, err := bimg.NewImage(buf).Process(options)
 	if err != nil {
+		if opts.Text != "" {
+			return "", apperror.InvalidInput("文字水印处理失败，建议指定字体或缩小字号", err)
+		}
 		return "", apperror.InvalidInput("图像处理失败", err)
 	}
 	if err := os.WriteFile(outPath, newImage, 0o644); err != nil {
@@ -100,9 +106,40 @@ func Watermark(inputPath, outputArg string, opts WatermarkOptions) (string, erro
 	return outPath, nil
 }
 
+func scaleWatermarkIfNeeded(buf []byte, wmSize bimg.ImageSize, baseSize bimg.ImageSize) ([]byte, bimg.ImageSize, error) {
+	if wmSize.Width <= 0 || wmSize.Height <= 0 || baseSize.Width <= 0 || baseSize.Height <= 0 {
+		return buf, wmSize, nil
+	}
+	maxW := int(float64(baseSize.Width) * 0.9)
+	maxH := int(float64(baseSize.Height) * 0.9)
+	if wmSize.Width <= maxW && wmSize.Height <= maxH {
+		return buf, wmSize, nil
+	}
+	scaleW := float64(maxW) / float64(wmSize.Width)
+	scaleH := float64(maxH) / float64(wmSize.Height)
+	scale := scaleW
+	if scaleH < scaleW {
+		scale = scaleH
+	}
+	newW := int(float64(wmSize.Width) * scale)
+	newH := int(float64(wmSize.Height) * scale)
+	if newW <= 0 {
+		newW = 1
+	}
+	if newH <= 0 {
+		newH = 1
+	}
+	resized, err := bimg.NewImage(buf).Process(bimg.Options{Width: newW, Height: newH})
+	if err != nil {
+		return nil, wmSize, apperror.InvalidInput("水印缩放失败", err)
+	}
+	newSize := bimg.ImageSize{Width: newW, Height: newH}
+	return resized, newSize, nil
+}
+
 func buildWatermarkBuffer(baseBuf []byte, opts WatermarkOptions) ([]byte, error) {
 	if opts.Text != "" {
-		return renderTextWatermark(opts.Text, opts.FontSize, opts.Font, opts.Color, opts.Opacity, opts.StrokeColor, opts.StrokeWidth, opts.Background)
+		return renderTextWatermark(opts.Text, opts.FontSize, opts.Font, opts.FontFile, opts.Color, opts.Opacity, opts.StrokeColor, opts.StrokeWidth, opts.Background, opts.StrokeMode)
 	}
 	logoBuf, err := os.ReadFile(opts.LogoPath)
 	if err != nil {
@@ -184,106 +221,4 @@ func gravityPosition(baseW, baseH, wmW, wmH int, gravity string, offsetX, offset
 		top = baseH - wmH
 	}
 	return left, top, nil
-}
-
-func renderTextWatermark(text string, fontSize int, font, color string, opacity float64, strokeColor string, strokeWidth int, background string) ([]byte, error) {
-	cmdPath, ok := ImageMagickCommand()
-	if !ok {
-		return nil, apperror.UnsupportedFormat("文本水印需要安装 ImageMagick", nil)
-	}
-	if fontSize <= 0 {
-		fontSize = 24
-	}
-	if color == "" {
-		color = "white"
-	}
-	if background == "" {
-		background = "none"
-	}
-	if opacity <= 0 || opacity > 1 {
-		opacity = 0.5
-	}
-	fillColor := color
-	stroke := ""
-	if strokeWidth > 0 {
-		if strokeColor == "" {
-			strokeColor = "black"
-		}
-		stroke = strokeColor
-	}
-	buildArgs := func(fontName string) []string {
-		args := []string{
-			"-background",
-			background,
-			"-fill",
-			fillColor,
-			"-pointsize",
-			fmt.Sprintf("%d", fontSize),
-			"label:" + text,
-			"-alpha",
-			"set",
-			"-channel",
-			"A",
-			"-evaluate",
-			"set",
-			fmt.Sprintf("%.0f%%", opacity*100),
-			"png:-",
-		}
-		if strokeWidth > 0 {
-			args = append([]string{
-				"-stroke",
-				stroke,
-				"-strokewidth",
-				fmt.Sprintf("%d", strokeWidth),
-			}, args...)
-		}
-		if fontName != "" {
-			args = append([]string{"-font", fontName}, args...)
-		}
-		return args
-	}
-
-	tryRender := func(fontName string) ([]byte, error) {
-		cmd := exec.Command(cmdPath, buildArgs(fontName)...)
-		var stderr bytes.Buffer
-		cmd.Stderr = &stderr
-		output, err := cmd.Output()
-		if err != nil {
-			errMsg := strings.TrimSpace(stderr.String())
-			if errMsg == "" {
-				errMsg = "文本水印生成失败"
-			}
-			return nil, apperror.ConfigError(errMsg, err)
-		}
-		return output, nil
-	}
-
-	if font != "" {
-		return tryRender(font)
-	}
-
-	output, err := tryRender("")
-	if err == nil {
-		return output, nil
-	}
-
-	fallbackFonts := []string{
-		"Noto Sans CJK SC",
-		"Noto Sans CJK",
-		"Source Han Sans SC",
-		"WenQuanYi Zen Hei",
-		"WenQuanYi Micro Hei",
-	}
-	var lastErr error
-	for _, fontName := range fallbackFonts {
-		output, err = tryRender(fontName)
-		if err == nil {
-			return output, nil
-		}
-		lastErr = err
-	}
-	if lastErr == nil {
-		lastErr = apperror.ConfigError("文本水印生成失败", nil)
-	}
-	return nil, apperror.ConfigError("未找到可用中文字体，建议安装 fonts-noto-cjk 或 fonts-wqy-zenhei", lastErr)
 }

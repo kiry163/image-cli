@@ -40,10 +40,12 @@ type WatermarkConfig struct {
 	DefaultOffsetY     int     `mapstructure:"default_offset_y"`
 	DefaultFontSize    int     `mapstructure:"default_font_size"`
 	DefaultFont        string  `mapstructure:"default_font"`
+	DefaultFontFile    string  `mapstructure:"default_font_file"`
 	DefaultColor       string  `mapstructure:"default_color"`
 	DefaultStrokeColor string  `mapstructure:"default_stroke_color"`
 	DefaultStrokeWidth int     `mapstructure:"default_stroke_width"`
 	DefaultBackground  string  `mapstructure:"default_background"`
+	DefaultStrokeMode  string  `mapstructure:"default_stroke_mode"`
 }
 
 type AIConfig struct {
@@ -87,10 +89,12 @@ func NewViper() *viper.Viper {
 	v.SetDefault("watermark.default_offset_y", 0)
 	v.SetDefault("watermark.default_font_size", 24)
 	v.SetDefault("watermark.default_font", "")
+	v.SetDefault("watermark.default_font_file", "")
 	v.SetDefault("watermark.default_color", "white")
 	v.SetDefault("watermark.default_stroke_color", "")
 	v.SetDefault("watermark.default_stroke_width", 0)
 	v.SetDefault("watermark.default_background", "none")
+	v.SetDefault("watermark.default_stroke_mode", "circle")
 
 	v.SetDefault("ai.default_model", "gpt-4o")
 	v.SetDefault("ai.output.default_format", "")
