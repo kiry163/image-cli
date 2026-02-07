@@ -1,3 +1,30 @@
+---
+name: image-cli
+description: "Go image processing CLI tool with libvips. Supports convert, compress, resize, rotate, watermark, and batch operations."
+metadata:
+  {
+    "openclaw":
+      {
+        "emoji": "🖼️",
+        "requires": { "bins": ["image-cli"] },
+        "install":
+          [
+            {
+              "id": "install-script",
+              "kind": "script",
+              "url": "https://raw.githubusercontent.com/kiry163/image-cli/main/scripts/install.sh",
+              "label": "Install ImageCLI (curl | bash)",
+            },
+            {
+              "id": "manual-build",
+              "kind": "build",
+              "label": "Build from source (Go 1.23.12+)",
+            },
+          ],
+      },
+  }
+---
+
 # ImageCLI Skill 指南
 
 面向 AI Agent 的 ImageCLI 使用指南，包含安装、依赖检查与命令示例。
@@ -166,6 +193,7 @@ image-cli rotate input.jpg output.jpg --flop
 - `--opacity, -o` 透明度（0-1）
 - `--scale, -s` 缩放比例（相对原图短边）
 - `--offset-x/--offset-y` 像素偏移
+
 ```bash
 image-cli watermark input.jpg logo.png output.jpg --opacity 0.6 --scale 0.2
 image-cli watermark input.jpg logo.png output.jpg --gravity center --offset-x 10 --offset-y -10
@@ -183,6 +211,7 @@ image-cli watermark input.jpg logo.png output.jpg --gravity center --offset-x 10
 - `--stroke-color` 描边颜色
 - `--stroke-width` 描边宽度（px）
 - `--background` 背景色（如 #000000 或 none）
+
 ```bash
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --gravity southeast
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --font "Arial" --color "#ffffff"
