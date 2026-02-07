@@ -8,6 +8,14 @@
 *.so
 *.dylib
 
+# Project binaries
+image-cli
+image-cli.exe
+
+# Build artifacts
+build/
+dist/
+
 # Test binary, built with `go test -c`
 *.test
 
@@ -27,6 +35,12 @@ go.work.sum
 # env file
 .env
 
+# Config
+config.yaml
+
+# OS
+.DS_Store
+
 # Editor/IDE
-# .idea/
+.idea/
 # .vscode/

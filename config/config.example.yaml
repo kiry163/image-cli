@@ -1,0 +1,58 @@
+# ImageCLI 配置示例
+
+# 基础设置
+base:
+  output_dir: ./output
+  overwrite: false
+  keep_temp: false
+  recursive: true
+  conflict: skip
+
+# 压缩设置
+compress:
+  default_quality: 85
+  max_width: 4096
+  max_height: 4096
+
+# 水印设置
+watermark:
+  default_opacity: 0.5
+  default_scale: 0.2
+  default_gravity: southeast
+  default_offset_x: 0
+  default_offset_y: 0
+  default_font_size: 24
+  default_font: ""
+  default_color: white
+  default_stroke_color: ""
+  default_stroke_width: 0
+  default_background: none
+
+# AI 模型配置
+ai:
+  default_model: gpt-4o
+
+  output:
+    default_format: ""
+    remove_bg_format: png
+
+  models:
+    gpt-4o:
+      provider: openai
+      api_key_env: OPENAI_API_KEY
+      endpoint: https://api.openai.com/v1
+
+    claude-3-5-sonnet:
+      provider: anthropic
+      api_key_env: ANTHROPIC_API_KEY
+      endpoint: https://api.anthropic.com
+
+    gemini-1.5-pro:
+      provider: google
+      api_key_env: GOOGLE_API_KEY
+      endpoint: https://generativelanguage.googleapis.com/v1
+
+# 日志设置
+logging:
+  level: info
+  format: json
