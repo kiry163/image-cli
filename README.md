@@ -144,7 +144,7 @@ image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --stroke
 image-cli watermark input.jpg output.jpg --text "Sample" --font-size 24 --background "#000000" --color "#ffffff"
 ```
 
-说明: 文字水印依赖 ImageMagick（`magick` 或 `convert`）。
+说明: 文字水印依赖 ImageMagick（`magick` 或 `convert`）。中文水印需安装中文字体（如 `fonts-noto-cjk` 或 `fonts-wqy-zenhei`）。
 
 ### batch
 

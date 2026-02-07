@@ -211,44 +211,79 @@ func renderTextWatermark(text string, fontSize int, font, color string, opacity 
 		}
 		stroke = strokeColor
 	}
-	args := []string{
-		"-background",
-		background,
-		"-fill",
-		fillColor,
-		"-pointsize",
-		fmt.Sprintf("%d", fontSize),
-		"label:" + text,
-		"-alpha",
-		"set",
-		"-channel",
-		"A",
-		"-evaluate",
-		"set",
-		fmt.Sprintf("%.0f%%", opacity*100),
-		"png:-",
-	}
-	if strokeWidth > 0 {
-		args = append([]string{
-			"-stroke",
-			stroke,
-			"-strokewidth",
-			fmt.Sprintf("%d", strokeWidth),
-		}, args...)
-	}
-	if font != "" {
-		args = append([]string{"-font", font}, args...)
-	}
-	cmd := exec.Command(cmdPath, args...)
-	var stderr bytes.Buffer
-	cmd.Stderr = &stderr
-	output, err := cmd.Output()
-	if err != nil {
-		errMsg := strings.TrimSpace(stderr.String())
-		if errMsg == "" {
-			errMsg = "文本水印生成失败"
+	buildArgs := func(fontName string) []string {
+		args := []string{
+			"-background",
+			background,
+			"-fill",
+			fillColor,
+			"-pointsize",
+			fmt.Sprintf("%d", fontSize),
+			"label:" + text,
+			"-alpha",
+			"set",
+			"-channel",
+			"A",
+			"-evaluate",
+			"set",
+			fmt.Sprintf("%.0f%%", opacity*100),
+			"png:-",
 		}
-		return nil, apperror.ConfigError(errMsg, err)
+		if strokeWidth > 0 {
+			args = append([]string{
+				"-stroke",
+				stroke,
+				"-strokewidth",
+				fmt.Sprintf("%d", strokeWidth),
+			}, args...)
+		}
+		if fontName != "" {
+			args = append([]string{"-font", fontName}, args...)
+		}
+		return args
 	}
-	return output, nil
+
+	tryRender := func(fontName string) ([]byte, error) {
+		cmd := exec.Command(cmdPath, buildArgs(fontName)...)
+		var stderr bytes.Buffer
+		cmd.Stderr = &stderr
+		output, err := cmd.Output()
+		if err != nil {
+			errMsg := strings.TrimSpace(stderr.String())
+			if errMsg == "" {
+				errMsg = "文本水印生成失败"
+			}
+			return nil, apperror.ConfigError(errMsg, err)
+		}
+		return output, nil
+	}
+
+	if font != "" {
+		return tryRender(font)
+	}
+
+	output, err := tryRender("")
+	if err == nil {
+		return output, nil
+	}
+
+	fallbackFonts := []string{
+		"Noto Sans CJK SC",
+		"Noto Sans CJK",
+		"Source Han Sans SC",
+		"WenQuanYi Zen Hei",
+		"WenQuanYi Micro Hei",
+	}
+	var lastErr error
+	for _, fontName := range fallbackFonts {
+		output, err = tryRender(fontName)
+		if err == nil {
+			return output, nil
+		}
+		lastErr = err
+	}
+	if lastErr == nil {
+		lastErr = apperror.ConfigError("文本水印生成失败", nil)
+	}
+	return nil, apperror.ConfigError("未找到可用中文字体，建议安装 fonts-noto-cjk 或 fonts-wqy-zenhei", lastErr)
 }

@@ -273,6 +273,7 @@ Examples:
 
 说明:
   - 文字水印依赖 ImageMagick（使用 `magick` 或 `convert`）
+  - 中文水印需安装中文字体（如 `fonts-noto-cjk` 或 `fonts-wqy-zenhei`）
 ```
 
 #### 4.2.6 info - 查看信息

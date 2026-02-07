@@ -201,7 +201,7 @@ image-cli watermark input.jpg logo.png output.jpg --gravity center --offset-x 10
 
 ### 3.9 watermark（文字水印，依赖 ImageMagick）
 
-文字水印支持字体、颜色、描边与背景，适合动态标识。
+文字水印支持字体、颜色、描边与背景，适合动态标识。中文水印需安装中文字体。
 
 关键参数：
 - `--text` 文字内容
@@ -257,6 +257,7 @@ image-cli batch watermark "./images" --text "Sample" --font-size 24 --font "Aria
 ### 5.1 watermarks/ico 相关错误
 
 - 提示需要 ImageMagick：安装 `imagemagick` 后重试。
+- 中文水印失败：安装中文字体（如 `fonts-noto-cjk` 或 `fonts-wqy-zenhei`）。
 
 ### 5.2 配置文件错误
 
