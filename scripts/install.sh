@@ -50,6 +50,10 @@ case "$ARCH" in
     ;;
 esac
 
+if [ "$OS_NAME" = "darwin" ] && [ "$ARCH_NAME" = "amd64" ]; then
+  fail "当前未提供 darwin-amd64 二进制"
+fi
+
 BIN_NAME="image-cli-${OS_NAME}-${ARCH_NAME}"
 
 if ! command_exists pkg-config; then
