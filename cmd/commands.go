@@ -147,7 +147,7 @@ func newResizeCmd() *cobra.Command {
 		},
 	}
 	cmd.Flags().StringP("width", "w", "", "宽度")
-	cmd.Flags().StringP("height", "h", "", "高度")
+	cmd.Flags().String("height", "", "高度")
 	cmd.Flags().StringP("fit", "f", "", "适应模式")
 	cmd.Flags().Bool("without-enlargement", true, "不放大")
 	cmd.Flags().Bool("keep-ratio", true, "保持比例")

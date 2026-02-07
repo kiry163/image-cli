@@ -214,7 +214,7 @@ image-cli resize <input> <output> [options]
 
 Options:
   --width, -w       宽度 (px 或 %)
-  --height, -h     高度 (px 或 %)
+  --height         高度 (px 或 %)
   --fit, -f        适应模式: cover | contain | fill | inside | outside
   --without-enlargement  不放大（默认）
   --keep-ratio     保持比例（默认）
