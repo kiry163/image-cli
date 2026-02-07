@@ -14,6 +14,7 @@ import (
 func init() {
 	rootCmd.AddCommand(
 		newConfigCmd(),
+		newVersionCmd(),
 		newFormatsCmd(),
 		newInfoCmd(),
 		newConvertCmd(),

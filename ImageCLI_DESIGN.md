@@ -162,6 +162,13 @@ Options:
   - 可转换格式组合
 ```
 
+#### 4.2.0.2 version - 查看版本
+
+```bash
+image-cli version
+image-cli --version
+```
+
 #### 4.2.1 convert - 格式转换
 
 ```bash

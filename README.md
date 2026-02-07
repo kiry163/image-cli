@@ -26,6 +26,12 @@ sudo apt-get install -y libvips libvips-dev pkg-config
 go build -o image-cli main.go
 ```
 
+## 安装
+
+```bash
+curl -fsSL https://raw.githubusercontent.com/kiry163/image-cli/main/scripts/install.sh | bash
+```
+
 
 ## 配置文件
 
@@ -69,6 +75,15 @@ image-cli formats --from png --to webp
 
 ```bash
 image-cli info input.jpg
+```
+
+### version
+
+查看版本信息。
+
+```bash
+image-cli version
+image-cli --version
 ```
 
 ### convert
@@ -142,17 +157,6 @@ image-cli batch resize "./images" --width 800 --height 600 --fit cover --output 
 image-cli batch rotate "./images" --degrees 90 --output ./output/
 image-cli batch watermark "./images" --logo logo.png --opacity 0.6 --output ./output/
 image-cli batch watermark "./images" --text "Sample" --font-size 24 --font "Arial" --color "#ffffff" --stroke-color black --stroke-width 2 --output ./output/
-```
-
-## AI 命令（占位）
-
-当前版本仅返回 “未实现” 错误。
-
-```bash
-image-cli remove-watermark input.jpg
-image-cli remove-bg input.jpg
-image-cli enhance input.jpg --scale 2
-image-cli style-transfer input.jpg --style oil
 ```
 
 ## 全局参数

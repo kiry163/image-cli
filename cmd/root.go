@@ -9,7 +9,7 @@ import (
 	"github.com/spf13/cobra"
 )
 
-const version = "0.1.0"
+var Version = "dev"
 
 var (
 	cfgFile     string
@@ -33,7 +33,7 @@ var rootCmd = &cobra.Command{
 	RunE: func(cmd *cobra.Command, args []string) error {
 		showVersion, _ := cmd.Flags().GetBool("version")
 		if showVersion {
-			fmt.Fprintln(cmd.OutOrStdout(), version)
+			fmt.Fprintln(cmd.OutOrStdout(), Version)
 			return nil
 		}
 		return cmd.Help()
@@ -49,7 +49,7 @@ func Execute() int {
 }
 
 func init() {
-	rootCmd.Version = version
+	rootCmd.Version = Version
 	rootCmd.PersistentFlags().StringVarP(&cfgFile, "config", "c", "", "配置文件路径")
 	rootCmd.PersistentFlags().BoolVarP(&verbose, "verbose", "v", false, "详细输出")
 	rootCmd.PersistentFlags().BoolVar(&quiet, "quiet", false, "静默模式")
