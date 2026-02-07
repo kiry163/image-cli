@@ -51,7 +51,11 @@ case "$ARCH" in
 esac
 
 if [ "$OS_NAME" = "darwin" ] && [ "$ARCH_NAME" = "amd64" ]; then
-  fail "当前未提供 darwin-amd64 二进制"
+  fail "当前未提供 darwin-amd64 二进制，建议源码编译"
+fi
+
+if [ "$OS_NAME" = "linux" ] && [ "$ARCH_NAME" = "arm64" ]; then
+  fail "当前未提供 linux-arm64 二进制，建议源码编译"
 fi
 
 BIN_NAME="image-cli-${OS_NAME}-${ARCH_NAME}"
