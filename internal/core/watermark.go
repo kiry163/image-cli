@@ -203,13 +203,13 @@ func renderTextWatermark(text string, fontSize int, font, color string, opacity 
 	if opacity <= 0 || opacity > 1 {
 		opacity = 0.5
 	}
-	fillColor := applyOpacity(color, opacity)
+	fillColor := color
 	stroke := ""
 	if strokeWidth > 0 {
 		if strokeColor == "" {
 			strokeColor = "black"
 		}
-		stroke = applyOpacity(strokeColor, opacity)
+		stroke = strokeColor
 	}
 	args := []string{
 		"-background",
@@ -219,6 +219,13 @@ func renderTextWatermark(text string, fontSize int, font, color string, opacity 
 		"-pointsize",
 		fmt.Sprintf("%d", fontSize),
 		"label:" + text,
+		"-alpha",
+		"set",
+		"-channel",
+		"A",
+		"-evaluate",
+		"set",
+		fmt.Sprintf("%.0f%%", opacity*100),
 		"png:-",
 	}
 	if strokeWidth > 0 {
@@ -244,18 +251,4 @@ func renderTextWatermark(text string, fontSize int, font, color string, opacity 
 		return nil, apperror.ConfigError(errMsg, err)
 	}
 	return output, nil
-}
-
-func applyOpacity(color string, opacity float64) string {
-	color = strings.TrimSpace(color)
-	if color == "" || color == "none" || color == "transparent" {
-		return color
-	}
-	if opacity <= 0 || opacity >= 1 {
-		return color
-	}
-	if strings.Contains(color, "@") || strings.HasPrefix(color, "rgba(") || strings.HasPrefix(color, "hsla(") {
-		return color
-	}
-	return fmt.Sprintf("%s@%.3f", color, opacity)
 }
