@@ -488,7 +488,7 @@ func newBatchCmd() *cobra.Command {
 	cmd.Flags().Bool("flip", false, "水平翻转")
 	cmd.Flags().Bool("flop", false, "垂直翻转")
 	cmd.Flags().StringP("gravity", "g", "", "位置")
-	cmd.Flags().Float64P("opacity", "o", 0, "透明度")
+	cmd.Flags().Float64("opacity", 0, "透明度")
 	cmd.Flags().Float64P("scale", "s", 0, "缩放比例")
 	cmd.Flags().Int("offset-x", 0, "水平偏移(px)")
 	cmd.Flags().Int("offset-y", 0, "垂直偏移(px)")
