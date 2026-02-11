@@ -27,6 +27,9 @@ func init() {
 		newRemoveBgCmd(),
 		newEnhanceCmd(),
 		newStyleTransferCmd(),
+		newOcrCmd(),
+		newGenerateCmd(),
+		newRecognizeCmd(),
 	)
 }
 

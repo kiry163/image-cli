@@ -1,6 +1,6 @@
 ---
 name: image-cli
-description: "Go image processing CLI tool with libvips. Supports convert, compress, resize, rotate, watermark, and batch operations."
+description: "Go image processing CLI tool with libvips. Supports convert, compress, resize, rotate, watermark, batch operations, OCR, AI image generation, and visual recognition."
 metadata:
   {
     "openclaw":
@@ -242,6 +242,69 @@ image-cli batch resize "./images" --width 800 --height 600 --fit cover --output 
 image-cli batch rotate "./images" --degrees 90 --output ./output/
 image-cli batch watermark "./images" --logo logo.png --opacity 0.6 --output ./output/
 image-cli batch watermark "./images" --text "Sample" --font-size 24 --font "Arial" --color "#ffffff" --stroke-color black --stroke-width 2 --output ./output/
+```
+
+### 3.11 ocr（OCR 文字识别）
+
+使用 DeepSeek OCR API 从图片中提取文字内容，支持多种识别模式。
+
+关键参数：
+- `--mode, -m` 识别模式：`free`(默认), `markdown`, `text`, `figure`, `detail`
+- `--output, -o` 输出文件路径（默认输出到控制台）
+
+```bash
+# 基础识别
+image-cli ocr document.jpg
+
+# 输出为 Markdown 格式
+image-cli ocr document.png --mode markdown
+
+# 保存到文件
+image-cli ocr scan.jpg --mode text --output result.txt
+```
+
+### 3.12 generate（AI 图像生成）
+
+使用智谱 AI CogView 模型根据文本描述生成图像。支持多种模型和尺寸。
+
+关键参数：
+- `--model, -m` 模型：`cogview-3-flash`(免费), `glm-image`, `cogview-4`
+- `--size, -s` 图片尺寸：`1024x1024`, `768x1344`, `864x1152` 等
+- `--quality, -q` 质量：`standard`(默认), `hd`
+- `--output, -o` 输出文件路径
+
+```bash
+# 基本使用（免费模型）
+image-cli generate "一只可爱的小猫咪"
+
+# 指定模型和尺寸
+image-cli generate "夕阳下的海景" --model cogview-3-flash --size 1440x720
+
+# 高质量生成
+image-cli generate "科幻城市" --quality hd --output ./output/futuristic.png
+```
+
+### 3.13 recognize（AI 图片识别）
+
+使用智谱 AI GLM-4V 模型对图片进行视觉理解和分析，支持图片描述、分类、图表分析等。
+
+关键参数：
+- `--model, -m` 模型：`glm-4v-flash`(免费), `glm-4.6v`
+- `--prompt, -p` 分析提示词/问题（默认："请描述这张图片的内容"）
+- `--output, -o` 输出文件路径
+
+```bash
+# 基本描述
+image-cli recognize photo.jpg
+
+# 分析图表数据
+image-cli recognize chart.png --prompt "分析这张图表的数据趋势"
+
+# 商品分类
+image-cli recognize product.jpg --prompt "这是什么商品？请给出类别和特点"
+
+# 保存分析结果
+image-cli recognize scan.jpg --prompt "提取图中的文字并总结内容" --output analysis.txt
 ```
 
 ## 4. 全局参数

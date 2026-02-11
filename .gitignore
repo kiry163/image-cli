@@ -38,6 +38,9 @@ go.work.sum
 # Config
 config.yaml
 
+# Generated output
+output/
+
 # OS
 .DS_Store
 

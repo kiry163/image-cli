@@ -11,11 +11,14 @@ import (
 )
 
 type Config struct {
-	Base      BaseConfig      `mapstructure:"base"`
-	Compress  CompressConfig  `mapstructure:"compress"`
-	Watermark WatermarkConfig `mapstructure:"watermark"`
-	AI        AIConfig        `mapstructure:"ai"`
-	Logging   LoggingConfig   `mapstructure:"logging"`
+	Base            BaseConfig            `mapstructure:"base"`
+	Compress        CompressConfig        `mapstructure:"compress"`
+	Watermark       WatermarkConfig       `mapstructure:"watermark"`
+	OCR             OCRConfig             `mapstructure:"ocr"`
+	ImageGeneration ImageGenerationConfig `mapstructure:"image_generation"`
+	Vision          VisionConfig          `mapstructure:"vision"`
+	AI              AIConfig              `mapstructure:"ai"`
+	Logging         LoggingConfig         `mapstructure:"logging"`
 }
 
 type BaseConfig struct {
@@ -46,6 +49,28 @@ type WatermarkConfig struct {
 	DefaultStrokeWidth int     `mapstructure:"default_stroke_width"`
 	DefaultBackground  string  `mapstructure:"default_background"`
 	DefaultStrokeMode  string  `mapstructure:"default_stroke_mode"`
+}
+
+type OCRConfig struct {
+	APIKey      string `mapstructure:"api_key"`
+	BaseURL     string `mapstructure:"base_url"`
+	Model       string `mapstructure:"model"`
+	DefaultMode string `mapstructure:"default_mode"`
+}
+
+type ImageGenerationConfig struct {
+	APIKey         string `mapstructure:"api_key"`
+	BaseURL        string `mapstructure:"base_url"`
+	DefaultModel   string `mapstructure:"default_model"`
+	DefaultSize    string `mapstructure:"default_size"`
+	DefaultQuality string `mapstructure:"default_quality"`
+}
+
+type VisionConfig struct {
+	APIKey        string `mapstructure:"api_key"`
+	BaseURL       string `mapstructure:"base_url"`
+	DefaultModel  string `mapstructure:"default_model"`
+	DefaultPrompt string `mapstructure:"default_prompt"`
 }
 
 type AIConfig struct {
@@ -96,6 +121,22 @@ func NewViper() *viper.Viper {
 	v.SetDefault("watermark.default_background", "none")
 	v.SetDefault("watermark.default_stroke_mode", "circle")
 
+	v.SetDefault("ocr.api_key", "")
+	v.SetDefault("ocr.base_url", "https://www.dmxapi.cn/v1")
+	v.SetDefault("ocr.model", "DeepSeek-OCR")
+	v.SetDefault("ocr.default_mode", "free")
+
+	v.SetDefault("image_generation.api_key", "")
+	v.SetDefault("image_generation.base_url", "https://open.bigmodel.cn/api/paas/v4")
+	v.SetDefault("image_generation.default_model", "cogview-3-flash")
+	v.SetDefault("image_generation.default_size", "1024x1024")
+	v.SetDefault("image_generation.default_quality", "standard")
+
+	v.SetDefault("vision.api_key", "")
+	v.SetDefault("vision.base_url", "https://open.bigmodel.cn/api/paas/v4")
+	v.SetDefault("vision.default_model", "glm-4v-flash")
+	v.SetDefault("vision.default_prompt", "请描述这张图片的内容")
+
 	v.SetDefault("ai.default_model", "gpt-4o")
 	v.SetDefault("ai.output.default_format", "")
 	v.SetDefault("ai.output.remove_bg_format", "png")
@@ -108,6 +149,12 @@ func NewViper() *viper.Viper {
 	v.SetEnvKeyReplacer(replacer)
 	v.BindEnv("base.output_dir", "IMAGE_CLI_OUTPUT")
 	v.BindEnv("base.recursive", "IMAGE_CLI_RECURSIVE")
+	v.BindEnv("ocr.api_key", "OCR_API_KEY")
+	v.BindEnv("ocr.base_url", "OCR_BASE_URL")
+	v.BindEnv("image_generation.api_key", "IMAGE_GENERATION_API_KEY")
+	v.BindEnv("image_generation.base_url", "IMAGE_GENERATION_BASE_URL")
+	v.BindEnv("vision.api_key", "IMAGE_VISION_API_KEY")
+	v.BindEnv("vision.base_url", "IMAGE_VISION_BASE_URL")
 	v.AutomaticEnv()
 
 	return v

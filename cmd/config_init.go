@@ -103,6 +103,28 @@ const defaultConfigYAML = "" +
 	"      api_key_env: GOOGLE_API_KEY\n" +
 	"      endpoint: https://generativelanguage.googleapis.com/v1\n" +
 	"\n" +
+	"# OCR 文字识别配置\n" +
+	"ocr:\n" +
+	"  api_key: \"\"\n" +
+	"  base_url: \"https://www.dmxapi.cn/v1\"\n" +
+	"  model: \"DeepSeek-OCR\"\n" +
+	"  default_mode: \"free\"\n" +
+	"\n" +
+	"# AI图像生成配置\n" +
+	"image_generation:\n" +
+	"  api_key: \"\"\n" +
+	"  base_url: \"https://open.bigmodel.cn/api/paas/v4\"\n" +
+	"  default_model: \"cogview-3-flash\"\n" +
+	"  default_size: \"1024x1024\"\n" +
+	"  default_quality: \"standard\"\n" +
+	"\n" +
+	"# AI图片识别配置\n" +
+	"vision:\n" +
+	"  api_key: \"\"\n" +
+	"  base_url: \"https://open.bigmodel.cn/api/paas/v4\"\n" +
+	"  default_model: \"glm-4v-flash\"\n" +
+	"  default_prompt: \"请描述这张图片的内容\"\n" +
+	"\n" +
 	"# 日志设置\n" +
 	"logging:\n" +
 	"  level: info\n" +

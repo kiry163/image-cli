@@ -4,6 +4,7 @@ go 1.23.12
 
 require (
 	github.com/h2non/bimg v1.1.9
+	github.com/sashabaranov/go-openai v1.32.0
 	github.com/spf13/cobra v1.8.0
 	github.com/spf13/viper v1.18.2
 	golang.org/x/image v0.18.0

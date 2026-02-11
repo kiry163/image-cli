@@ -1,6 +1,6 @@
 # ImageCLI
 
-ImageCLI 是一个基于 Go + libvips 的图像处理命令行工具。当前阶段已实现基础命令与批量处理，AI 相关命令为占位。
+ImageCLI 是一个基于 Go + libvips 的图像处理命令行工具。支持基础图像处理、批量操作和 AI 功能（OCR、图像生成、视觉识别）。
 
 ## 依赖
 
@@ -161,6 +161,46 @@ image-cli batch watermark "./images" --logo logo.png --opacity 0.6 --output ./ou
 image-cli batch watermark "./images" --text "Sample" --font-size 24 --font "Arial" --color "#ffffff" --stroke-color black --stroke-width 2 --output ./output/
 image-cli batch watermark "./images" --text "Sample" --font-size 24 --font-file "/path/to/font.ttf" --output ./output/
 ```
+
+### ocr（OCR 文字识别）
+
+使用 DeepSeek OCR API 从图片中提取文字内容。
+
+```bash
+image-cli ocr document.jpg
+image-cli ocr document.png --mode markdown
+image-cli ocr scan.jpg --mode text --output result.txt
+```
+
+配置：需在 `config.yaml` 中设置 `ocr.api_key` 或使用环境变量 `OCR_API_KEY`。
+
+### generate（AI 图像生成）
+
+使用智谱 AI CogView 模型根据文本描述生成图像。
+
+```bash
+image-cli generate "一只可爱的小猫咪"
+image-cli generate "夕阳下的海景" --model cogview-3-flash --size 1440x720
+image-cli generate "科幻城市" --quality hd --output ./output/futuristic.png
+```
+
+配置：需在 `config.yaml` 中设置 `image_generation.api_key` 或使用环境变量 `IMAGE_GENERATION_API_KEY`。
+
+支持的模型：`cogview-3-flash`(免费)、`glm-image`、`cogview-4`。
+
+### recognize（AI 图片识别）
+
+使用智谱 AI GLM-4V 模型对图片进行视觉理解和分析。
+
+```bash
+image-cli recognize photo.jpg
+image-cli recognize chart.png --prompt "分析这张图表的数据趋势"
+image-cli recognize product.jpg --prompt "这是什么商品？请给出类别和特点"
+```
+
+配置：需在 `config.yaml` 中设置 `vision.api_key` 或使用环境变量 `IMAGE_VISION_API_KEY`。
+
+支持的模型：`glm-4v-flash`(免费)、`glm-4.6v`。
 
 ## 全局参数
 

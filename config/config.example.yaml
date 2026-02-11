@@ -54,6 +54,44 @@ ai:
       api_key_env: GOOGLE_API_KEY
       endpoint: https://generativelanguage.googleapis.com/v1
 
+# OCR 文字识别配置
+# 支持从图片中提取文字内容
+ocr:
+  # API 密钥，可通过环境变量 OCR_API_KEY 覆盖
+  api_key: ""
+  # API 基础地址
+  base_url: "https://www.dmxapi.cn/v1"
+  # OCR 模型名称
+  model: "DeepSeek-OCR"
+  # 默认识别模式: free | markdown | text | figure | detail
+  default_mode: "free"
+
+# AI图像生成配置
+# 支持使用智谱AI CogView模型生成图像
+image_generation:
+  # API 密钥，可通过环境变量 IMAGE_GENERATION_API_KEY 覆盖
+  api_key: ""
+  # API 基础地址
+  base_url: "https://open.bigmodel.cn/api/paas/v4"
+  # 默认模型: cogview-3-flash(免费), glm-image, cogview-4
+  default_model: "cogview-3-flash"
+  # 默认尺寸: 1024x1024, 768x1344, 864x1152, 1344x768, 1152x864, 1440x720, 720x1440
+  default_size: "1024x1024"
+  # 默认质量: standard(快速,约5-10秒), hd(高质量,约20秒)
+  default_quality: "standard"
+
+# AI图片识别配置
+# 支持使用智谱AI GLM-4V模型进行视觉理解
+vision:
+  # API 密钥，可通过环境变量 IMAGE_VISION_API_KEY 覆盖
+  api_key: ""
+  # API 基础地址
+  base_url: "https://open.bigmodel.cn/api/paas/v4"
+  # 默认模型: glm-4v-flash(免费), glm-4.6v
+  default_model: "glm-4v-flash"
+  # 默认提示词
+  default_prompt: "请描述这张图片的内容"
+
 # 日志设置
 logging:
   level: info
